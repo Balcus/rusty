@@ -8,16 +8,16 @@ use chrono::NaiveDate;
     about = "Terminal TODO App",
     long_about = None
 )]
-struct Args {
+pub struct Args {
     #[command(subcommand)]
-    command: Commands,
+    pub command: Commands,
 }
 
 #[derive(Subcommand, Debug)]
-enum Commands {
+pub enum Commands {
     /// Used to add a Task to the list
     Add {
-        /// name of taks to be added
+        /// Name of taks to be added
         name: String,
 
         /// Importance of the added task (optional)
@@ -25,18 +25,29 @@ enum Commands {
         importance: u32,
 
         /// Completion date of the task, format: YYYY-MM-DD (optional)
-        #[arg(short = 'd', long = "completion_date")]
+        #[arg(short = 'c', long = "completion_date")]
         completion_date: Option<String>
     },
 
     Delete {
         /// Name of the task to be deleted
-        task: String,
+        name: String,
     }
 }
 
+#[derive(Debug)]
 pub struct Task {
     name: String,
     importance: u32,
     completion_date: Option<NaiveDate>
+}
+
+impl Task {
+    pub fn new(name: String, importance: u32, completion_date: Option<NaiveDate>) -> Task {
+        Task {
+            name,
+            importance,
+            completion_date
+        }
+    }
 }
