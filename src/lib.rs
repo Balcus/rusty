@@ -1,5 +1,6 @@
+use std::fs;
 use clap::{Parser, Subcommand};
-use chrono::NaiveDate;
+use serde::{Serialize, Deserialize};
 
 #[derive(Parser, Debug)]
 #[command(
@@ -29,25 +30,38 @@ pub enum Commands {
         completion_date: Option<String>
     },
 
+    /// Used to delete a task from the list
     Delete {
         /// Name of the task to be deleted
         name: String,
     }
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize ,Debug)]
 pub struct Task {
-    name: String,
-    importance: u32,
-    completion_date: Option<NaiveDate>
+    pub name: String,
+    pub importance: u32,
+    pub completion_date: String
 }
 
 impl Task {
-    pub fn new(name: String, importance: u32, completion_date: Option<NaiveDate>) -> Task {
+    pub fn new(name: String, importance: u32, completion_date: String) -> Task {
         Task {
             name,
             importance,
             completion_date
         }
     }
+}
+
+// TODO: add error handling for functions below
+pub fn read_tasks_from_file() -> Vec<Task> {
+    let file_content = fs::read_to_string("./todo.json").unwrap_or_else(|_| String::from("[]"));
+    let deserialized: Vec<Task> = serde_json::from_str(&file_content).unwrap_or_else(|_| vec![]);
+    deserialized
+}
+
+pub fn write_tasks_to_file(tasks: Vec<Task>) {
+    let serialized = serde_json::to_string_pretty(&tasks).unwrap();
+    fs::write("./todo.json", serialized).unwrap();
 }
