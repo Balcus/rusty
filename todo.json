@@ -1,32 +1,26 @@
 [
   {
-    "name": "Task3",
+    "name": "Read about networks",
+    "importance": 4,
+    "completion_date": "-",
+    "status": "waiting"
+  },
+  {
+    "name": "Wash teeth",
+    "importance": 6,
+    "completion_date": "-",
+    "status": "waiting"
+  },
+  {
+    "name": "Finish RC assignment",
     "importance": 10,
-    "completion_date": "2025-03-05"
+    "completion_date": "2025-03-10",
+    "status": "waiting"
   },
   {
-    "name": "Task1",
-    "importance": 5,
-    "completion_date": "-"
-  },
-  {
-    "name": "Task1",
-    "importance": 5,
-    "completion_date": "-"
-  },
-  {
-    "name": "Task2",
-    "importance": 5,
-    "completion_date": "-"
-  },
-  {
-    "name": "Task3",
-    "importance": 10,
-    "completion_date": "-"
-  },
-  {
-    "name": "Task4",
-    "importance": 8,
-    "completion_date": "2025-03-01"
+    "name": "Drink coffee",
+    "importance": 0,
+    "completion_date": "-",
+    "status": "done"
   }
 ]

@@ -1,41 +1,29 @@
-use chrono::NaiveDate;
-use todo_cli::{create_file, read_tasks_from_file, write_tasks_to_file, Args, Commands, Task};
+use todo_cli::{manage_tasks::*, file_management::*, Args, Commands};
 use clap::Parser;
 
+// TODO: 
+// 1. make it possible for user to change task status
+// 2. start writing TESTS (very important)
+// 3. make it possible to order tasks
+// 4. make the status an enum
+// 5. show them in a calendar (if possible)
+// 6. make it possible to change task importance
 fn main() {
     create_file();
     let mut todo_list: Vec<Task> = read_tasks_from_file();
 
     let args = Args::parse();
     match args.command {
-        Commands::Add{name, importance, completion_date} => {
-            if let Some(date_as_str) = completion_date {
-                match NaiveDate::parse_from_str(&date_as_str, "%Y-%m-%d") {
-                    Ok(_date) => {
-                        let entry = Task {
-                            name,
-                            importance,
-                            completion_date: date_as_str
-                        };
-                        todo_list.push(entry);
-                    }
-                    Err(_e) => {
-                        println!("Failed to parse given date. Correct format: YYYY-MM-DD");
-                        return;
-                    }   
-                }
-            }else {
-                let entry = Task {
-                    name,
-                    importance,
-                    completion_date: "-".to_string()
-                };
-                todo_list.push(entry);
-            }
+        Commands::Add { name, importance, completion_date, status } => {
+            add_task(&mut todo_list, name, importance, completion_date, status);
         },
-        
-        Commands::Delete{name} => {
-            println!("Task {} deleted!", name);
+
+        Commands::Delete { name } => {
+            delete_task(&mut todo_list, name);
+        },
+
+        Commands::List => {
+            list_tasks(&todo_list);
         }
     }
 
