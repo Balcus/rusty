@@ -1,8 +1,9 @@
 use chrono::NaiveDate;
-use todo_cli::{read_tasks_from_file, write_tasks_to_file, Args, Commands, Task};
+use todo_cli::{create_file, read_tasks_from_file, write_tasks_to_file, Args, Commands, Task};
 use clap::Parser;
 
 fn main() {
+    create_file();
     let mut todo_list: Vec<Task> = read_tasks_from_file();
 
     let args = Args::parse();
@@ -21,7 +22,7 @@ fn main() {
                     Err(_e) => {
                         println!("Failed to parse given date. Correct format: YYYY-MM-DD");
                         return;
-                    }
+                    }   
                 }
             }else {
                 let entry = Task {
@@ -32,7 +33,7 @@ fn main() {
                 todo_list.push(entry);
             }
         },
-        // TODO: Add the logic for the delete function too
+        
         Commands::Delete{name} => {
             println!("Task {} deleted!", name);
         }
