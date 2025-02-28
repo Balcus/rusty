@@ -6,12 +6,6 @@
     "status": "waiting"
   },
   {
-    "name": "Wash teeth",
-    "importance": 6,
-    "completion_date": "-",
-    "status": "waiting"
-  },
-  {
     "name": "Finish RC assignment",
     "importance": 10,
     "completion_date": "2025-03-10",
@@ -22,5 +16,17 @@
     "importance": 0,
     "completion_date": "-",
     "status": "done"
+  },
+  {
+    "name": "Go for a walk",
+    "importance": 10,
+    "completion_date": "2040-04-05",
+    "status": "in_progress"
+  },
+  {
+    "name": "Go to the gym",
+    "importance": 5,
+    "completion_date": "-",
+    "status": "waiting"
   }
 ]
