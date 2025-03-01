@@ -82,6 +82,36 @@ pub fn list_tasks(list: &Vec<Task>) {
     }
 }
 
+pub fn modify_task(list: &mut Vec<Task>, name: String, new_status: Option<String>, new_imp: Option<u8>) {
+    let tasks_exist = list.iter().any(|t| t.name == name);
+    
+    if !tasks_exist {
+        println!("No task with name '{}' found!", name);
+        return;
+    }
+    
+    for task in list.iter_mut().filter(|t| t.name == name) {
+        if let Some(status) = &new_status {
+            let valid_status = vec!["waiting", "done", "in_progress"];
+            
+            if !valid_status.contains(&status.as_str()) {
+                println!(
+                    "Invalid status '{}'. Supported statuses: {:?}", 
+                    status, valid_status
+                );
+            } else {
+                task.status = status.clone();
+                println!("Status for task '{}' updated to '{}'", name, status);
+            }
+        }
+        
+        if let Some(imp) = new_imp {
+            task.importance = imp;
+            println!("Importance for task '{}' updated to '{}'", name, imp);
+        }
+    }
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -123,4 +153,77 @@ mod test {
         let status = String::from("waiting");
         let _task = Task::new(name, imp, cd, status);
     }
+
+    #[test]
+    fn test_add_task() {
+        let mut vec = Vec::new();
+        add_task(&mut vec, String::from("Foo"), 5, None, String::from("waiting"));
+        let res = Task {
+            name: String::from("Foo"),
+            importance: 5,
+            completion_date: String::from("-"),
+            status: String::from("waiting"),
+        };
+        assert_eq!(1, vec.len());
+        assert_eq!(vec[0], res);
+    }
+
+    #[test]
+    fn test_delete_task() {
+        let mut vec = Vec::new();
+        add_task(&mut vec, String::from("Foo"), 5, None, String::from("waiting"));
+        delete_task(&mut vec, String::from("Foo"));
+        assert_eq!(0, vec.len());
+    }
+
+    #[test]
+    fn test_delete_task_2() {
+        let mut vec = Vec::new();
+        add_task(&mut vec, String::from("Foo"), 5, None, String::from("waiting"));
+        add_task(&mut vec, String::from("Bar"), 5, None, String::from("waiting"));
+        add_task(&mut vec, String::from("FooBar"), 5, None, String::from("waiting"));
+        delete_task(&mut vec, String::from("Foo"));
+        assert_eq!(2, vec.len());
+    }
+
+    #[test]
+    fn test_same_name_delete() {
+        let mut vec = Vec::new();
+        add_task(&mut vec, String::from("Foo"), 5, None, String::from("waiting"));
+        add_task(&mut vec, String::from("Foo"), 7, None, String::from("in_progress"));
+        add_task(&mut vec, String::from("Foo"), 2, None, String::from("done"));
+        add_task(&mut vec, String::from("Foo"), 5, Some(String::from("2025-03-01")), String::from("waiting"));
+        delete_task(&mut vec, String::from("Foo"));
+        assert_eq!(0, vec.len());
+    }
+
+    #[test]
+    fn test_same_name_delete_2() {
+        let mut vec = Vec::new();
+        add_task(&mut vec, String::from("Foo"), 5, None, String::from("waiting"));
+        add_task(&mut vec, String::from("FooBar"), 7, None, String::from("in_progress"));
+        add_task(&mut vec, String::from("Bar"), 2, None, String::from("done"));
+        add_task(&mut vec, String::from("Foo"), 5, Some(String::from("2025-03-01")), String::from("waiting"));
+        delete_task(&mut vec, String::from("Foo"));
+        assert_eq!(2, vec.len());
+    }
+
+    #[test]
+    fn test_modify_task_status_valid() {
+        let mut vec = Vec::new();
+        add_task(&mut vec, String::from("Foo"), 5, None, String::from("waiting"));
+        modify_task(&mut vec, String::from("Foo"), Some(String::from("done")), None);
+        assert_eq!(vec[0].importance, 5);
+        assert_eq!(vec[0].status, String::from("done"))
+    }
+
+    #[test]
+    fn test_modify_task_importance() {
+        let mut vec = Vec::new();
+        add_task(&mut vec, String::from("Foo"), 5, None, String::from("waiting"));
+        modify_task(&mut vec, String::from("Foo"), None, Some(8));
+        assert_eq!(vec[0].status, String::from("waiting"));
+        assert_eq!(vec[0].importance, 8);
+    }
+    
 }

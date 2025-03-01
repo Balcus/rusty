@@ -47,4 +47,18 @@ pub enum Commands {
 
     /// Used to list tasks
     List, 
-}    
+
+    /// Used to change the status of a task
+    Modify {
+        /// Name of the task which should change attributes
+        name: String,
+
+        /// Status after change
+        #[arg(short = 's', long = "status")]
+        new_status: Option<String>,
+
+        /// Importance after change
+        #[arg(short = 'i', long = "importance")]
+        new_imp: Option<u8>,
+    }
+}   

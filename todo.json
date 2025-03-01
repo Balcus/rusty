@@ -1,9 +1,9 @@
 [
   {
     "name": "Read about networks",
-    "importance": 4,
+    "importance": 10,
     "completion_date": "-",
-    "status": "waiting"
+    "status": "in_progress"
   },
   {
     "name": "Finish RC assignment",
